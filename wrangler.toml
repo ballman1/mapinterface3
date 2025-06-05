@@ -1,5 +1,10 @@
-name = "epipen-map"
+name              = "epiaccess-map-worker"     # must be unique in your CF account
 compatibility_date = "2025-06-04"
 
 [assets]
-directory = "./public"
+directory = "./public"                         # Wrangler uploads *everything* here
+
+[[routes]]
+pattern   = "epiaccess.org/epimap/*"           # Bind only this sub-path
+zone_name = "epiaccess.org"
+workers_dev = false                            # Keeps the workers.dev preview off
