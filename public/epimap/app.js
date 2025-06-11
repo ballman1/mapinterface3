@@ -16,26 +16,29 @@ const auth = firebase.auth();
 
 auth.signInAnonymously().catch(console.error);
 
-// Embedded EpiPen icon as SVG data URL (32x32)
-const iconDefault = "data:image/svg+xml;base64," + btoa(`
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect x="6" y="12" width="20" height="8" rx="4" fill="#ff6b35" stroke="#333" stroke-width="1"/>
-  <rect x="8" y="14" width="16" height="4" rx="2" fill="#ffae35"/>
-  <text x="16" y="18" text-anchor="middle" fill="#333" font-size="8" font-family="Arial">EPI</text>
-  <circle cx="24" cy="16" r="2" fill="#ff0000"/>
-</svg>
-`);
+// Use Google Maps built-in icons that work reliably
+const iconDefault = {
+  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="12" fill="#ff6b35" stroke="#fff" stroke-width="2"/>
+      <text x="16" y="20" text-anchor="middle" fill="white" font-size="10" font-family="Arial, sans-serif" font-weight="bold">EPI</text>
+    </svg>
+  `),
+  scaledSize: new google.maps.Size(32, 32),
+  anchor: new google.maps.Point(16, 16)
+};
 
-// Verified icon (green version)
-const iconVerified = "data:image/svg+xml;base64," + btoa(`
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect x="6" y="12" width="20" height="8" rx="4" fill="#4caf50" stroke="#333" stroke-width="1"/>
-  <rect x="8" y="14" width="16" height="4" rx="2" fill="#8bc34a"/>
-  <text x="16" y="18" text-anchor="middle" fill="#fff" font-size="8" font-family="Arial">EPI</text>
-  <circle cx="24" cy="16" r="2" fill="#2e7d32"/>
-  <path d="M22 14 l2 2 l4-4" stroke="#fff" stroke-width="1.5" fill="none"/>
-</svg>
-`);
+const iconVerified = {
+  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="12" fill="#4caf50" stroke="#fff" stroke-width="2"/>
+      <text x="16" y="20" text-anchor="middle" fill="white" font-size="10" font-family="Arial, sans-serif" font-weight="bold">EPI</text>
+      <path d="M12 16 l3 3 l6-6" stroke="white" stroke-width="2" fill="none"/>
+    </svg>
+  `),
+  scaledSize: new google.maps.Size(32, 32),
+  anchor: new google.maps.Point(16, 16)
+};
 
 // Helper function to create markers with full functionality
 function createMarker(map, data, docId, likes = 0, flags = 0) {
@@ -43,10 +46,7 @@ function createMarker(map, data, docId, likes = 0, flags = 0) {
     position: { lat: data.lat, lng: data.lng },
     map,
     title: data.name,
-    icon: {
-      url: data.verifiedByBusiness ? iconVerified : iconDefault,
-      scaledSize: new google.maps.Size(32, 32)
-    }
+    icon: data.verifiedByBusiness ? iconVerified : iconDefault
   });
 
   const infoWindow = new google.maps.InfoWindow({
