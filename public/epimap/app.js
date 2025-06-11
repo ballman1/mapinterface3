@@ -16,9 +16,9 @@ const auth = firebase.auth();
 
 auth.signInAnonymously().catch(console.error);
 
-// Use hosted EpiPen images
-const iconDefault = "images/epipen_icon_transparent_32x32.png";
-const iconVerified = "images/epipen_icon_transparent_32x32.png"; // You can use a different image for verified if you have one
+// Use hosted EpiPen images - path relative to the root
+const iconDefault = "../../images/epipen_icon_transparent_32x32.png";
+const iconVerified = "../../images/epipen_icon_transparent_32x32.png"; // You can use a different image for verified if you have one
 
 // Helper function to create markers with full functionality
 function createMarker(map, data, docId, likes = 0, flags = 0) {
