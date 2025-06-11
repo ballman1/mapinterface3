@@ -16,29 +16,9 @@ const auth = firebase.auth();
 
 auth.signInAnonymously().catch(console.error);
 
-// Use Google Maps built-in icons that work reliably
-const iconDefault = {
-  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="12" fill="#ff6b35" stroke="#fff" stroke-width="2"/>
-      <text x="16" y="20" text-anchor="middle" fill="white" font-size="10" font-family="Arial, sans-serif" font-weight="bold">EPI</text>
-    </svg>
-  `),
-  scaledSize: new google.maps.Size(32, 32),
-  anchor: new google.maps.Point(16, 16)
-};
-
-const iconVerified = {
-  url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="12" fill="#4caf50" stroke="#fff" stroke-width="2"/>
-      <text x="16" y="20" text-anchor="middle" fill="white" font-size="10" font-family="Arial, sans-serif" font-weight="bold">EPI</text>
-      <path d="M12 16 l3 3 l6-6" stroke="white" stroke-width="2" fill="none"/>
-    </svg>
-  `),
-  scaledSize: new google.maps.Size(32, 32),
-  anchor: new google.maps.Point(16, 16)
-};
+// Use hosted EpiPen images
+const iconDefault = "images/epipen_icon_transparent_32x32.png";
+const iconVerified = "images/epipen_icon_transparent_32x32.png"; // You can use a different image for verified if you have one
 
 // Helper function to create markers with full functionality
 function createMarker(map, data, docId, likes = 0, flags = 0) {
@@ -46,7 +26,10 @@ function createMarker(map, data, docId, likes = 0, flags = 0) {
     position: { lat: data.lat, lng: data.lng },
     map,
     title: data.name,
-    icon: data.verifiedByBusiness ? iconVerified : iconDefault
+    icon: {
+      url: data.verifiedByBusiness ? iconVerified : iconDefault,
+      scaledSize: new google.maps.Size(32, 32)
+    }
   });
 
   const infoWindow = new google.maps.InfoWindow({
